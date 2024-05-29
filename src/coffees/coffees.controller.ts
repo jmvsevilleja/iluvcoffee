@@ -33,7 +33,8 @@ export class CoffeesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Coffee {
+  findOne(@Param('id') id: number): Coffee {
+    console.log(typeof id);
     return this.coffeesService.findOne(id);
     // return `This action returns #${id} coffees!!!`;
   }
@@ -47,6 +48,7 @@ export class CoffeesController {
 
   @Post()
   create(@Body() createCoffeeDto: CreateCoffeeDto) {
+    console.log(createCoffeeDto instanceof CreateCoffeeDto);
     // const {name, age} = body;
     return this.coffeesService.create(createCoffeeDto);
     // return `This action creates ${name}, ${age} coffees!!!`;
@@ -54,7 +56,7 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto) {
+  update(@Param('id') id: number, @Body() updateCoffeeDto: UpdateCoffeeDto) {
     return this.coffeesService.update(id, updateCoffeeDto);
     //return `This action updates #${id} coffees!!!`;
   }
