@@ -26,14 +26,14 @@ export class CoffeesController {
   //   }
 
   @Get()
-  findAll(@Query() paginationQuery): Coffee[] {
+  findAll(@Query() paginationQuery) {
     // const {limit, offset} = paginationQuery;
     return this.coffeesService.findAll();
     // return `This action returns all coffees!!! Limit: ${limit}, offset ${offset}`;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number): Coffee {
+  findOne(@Param('id') id: number) {
     console.log(typeof id);
     return this.coffeesService.findOne(id);
     // return `This action returns #${id} coffees!!!`;
@@ -62,7 +62,7 @@ export class CoffeesController {
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
+  delete(@Param('id') id: number) {
     return this.coffeesService.remove(id);
     // return `This action removes #${id} coffees!!!`;
   }
