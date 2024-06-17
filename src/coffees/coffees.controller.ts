@@ -15,6 +15,7 @@ import { CoffeesService } from './coffees.service';
 import { Coffee } from './entities/coffee.entity';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 
 @Controller('coffees')
 export class CoffeesController {
@@ -26,9 +27,9 @@ export class CoffeesController {
   //   }
 
   @Get()
-  findAll(@Query() paginationQuery) {
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
     // const {limit, offset} = paginationQuery;
-    return this.coffeesService.findAll();
+    return this.coffeesService.findAll(paginationQuery);
     // return `This action returns all coffees!!! Limit: ${limit}, offset ${offset}`;
   }
 
