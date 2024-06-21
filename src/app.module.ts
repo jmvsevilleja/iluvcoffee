@@ -7,6 +7,7 @@ import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getTypeOrmConfig } from './config/typeorm.config';
+import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
@@ -23,6 +24,7 @@ console.log('process.env.NODE_ENV', process.env.NODE_ENV);
         getTypeOrmConfig(configService),
     }),
     CoffeesModule,
+    CoffeeRatingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
