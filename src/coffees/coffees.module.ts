@@ -8,8 +8,16 @@ import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS } from './coffees.constants';
 
 class ConfigService {}
-class DevelopmentConfigService {}
-class ProductionConfigService {}
+class DevelopmentConfigService {
+  constructor() {
+    console.log('DevelopmentConfigService');
+  }
+}
+class ProductionConfigService {
+  constructor() {
+    console.log('ProductionConfigService');
+  }
+}
 
 @Injectable()
 export class CoffeeBrandsFactory {
