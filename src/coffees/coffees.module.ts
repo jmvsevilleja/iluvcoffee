@@ -5,7 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Coffee } from './entities/coffee.entity';
 import { Flavor } from './entities/flavor.entity';
 import { Event } from '../events/entities/event.entity';
-import { COFFEE_BRANDS } from './coffees.constants';
+import { COFFEE_BRANDS, COFFEE_SHOPS } from './coffees.constants';
+import { DataSource } from 'typeorm';
 
 class ConfigService {}
 class DevelopmentConfigService {
@@ -22,7 +23,14 @@ class ProductionConfigService {
 @Injectable()
 export class CoffeeBrandsFactory {
   create() {
-    return ['blend45', 'nescafe'];
+    return ['Blend45', 'Nescafe'];
+  }
+}
+
+@Injectable()
+export class CoffeeShopsFactory {
+  create() {
+    return ['Starbucks', 'Coffee Project'];
   }
 }
 
@@ -33,6 +41,7 @@ export class CoffeeBrandsFactory {
   providers: [
     CoffeesService,
     CoffeeBrandsFactory,
+    CoffeeShopsFactory,
     {
       provide: ConfigService,
       useClass:
@@ -40,12 +49,26 @@ export class CoffeeBrandsFactory {
           ? DevelopmentConfigService
           : ProductionConfigService,
     }, //  custom providers
-    { provide: COFFEE_BRANDS, useValue: ['kopiko', 'nescafe'] }, // non class provider tokens
+    { provide: COFFEE_BRANDS, useValue: ['Kopiko', 'Nescafe'] }, // non class provider tokens
     {
       provide: COFFEE_BRANDS,
       useFactory: (brandsFactory: CoffeeBrandsFactory) =>
         brandsFactory.create(),
       inject: [CoffeeBrandsFactory],
+    }, // factory Providers
+    {
+      provide: COFFEE_SHOPS,
+      useFactory: (ShopsFactory: CoffeeShopsFactory) => ShopsFactory.create(),
+      inject: [CoffeeShopsFactory],
+    }, // factory Providers
+    {
+      provide: COFFEE_BRANDS,
+      useFactory: async (dataSource: DataSource): Promise<string[]> => {
+        const coffeeBrands = await Promise.resolve(['greate Taste', 'Nescafe']);
+        console.log('[!] Async Factory');
+        return coffeeBrands;
+      },
+      inject: [DataSource],
     }, // factory Providers
   ],
 })
