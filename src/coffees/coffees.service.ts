@@ -10,7 +10,7 @@ import { DataSource } from 'typeorm';
 import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS, COFFEE_SHOPS } from './coffees.constants';
 
-@Injectable({ scope: Scope.DEFAULT }) // DEFAULT, TRANSIENT, REQUEST scope - instance lifetime of a provider
+@Injectable({ scope: Scope.REQUEST }) // DEFAULT, TRANSIENT, REQUEST scope - instance lifetime of a provider
 export class CoffeesService {
   constructor(
     @InjectRepository(Coffee)
