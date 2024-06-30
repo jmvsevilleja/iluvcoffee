@@ -20,9 +20,11 @@ console.log('process.env.NODE_ENV', process.env.NODE_ENV);
     }),
     DatabaseModule.register({
       type: 'postgres',
-      host: 'localhost',
-      password: 'password',
-      port: 5432,
+      host: process.env.DB_HOST,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+      port: +process.env.DB_PORT,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
