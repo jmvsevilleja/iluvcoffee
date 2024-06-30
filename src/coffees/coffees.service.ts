@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
 import { InjectRepository, InjectDataSource } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,7 +10,7 @@ import { DataSource } from 'typeorm';
 import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS, COFFEE_SHOPS } from './coffees.constants';
 
-@Injectable()
+@Injectable({ scope: Scope.DEFAULT }) // DEFAULT, TRANSIENT, REQUEST scope - instance lifetime of a provider
 export class CoffeesService {
   constructor(
     @InjectRepository(Coffee)
@@ -23,6 +23,7 @@ export class CoffeesService {
   ) {
     console.log('coffeBrands', coffeeBrands);
     console.log('coffeShops', coffeeShops);
+    console.log('CoffeeService instantiated');
   }
 
   async findAll(paginationQuery: PaginationQueryDto) {

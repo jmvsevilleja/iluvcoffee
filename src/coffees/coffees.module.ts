@@ -72,4 +72,8 @@ export class CoffeeShopsFactory {
     }, // factory Providers
   ],
 })
-export class CoffeesModule {}
+export class CoffeesModule {
+  constructor() {
+    console.log('CoffeesModule instantiated');
+  }
+}
