@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getTypeOrmConfig } from './config/typeorm.config';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
+import { DatabaseModule } from './database/database.module';
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
@@ -16,6 +17,12 @@ console.log('process.env.NODE_ENV', process.env.NODE_ENV);
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', `.env.${process.env.NODE_ENV || 'local'}`],
+    }),
+    DatabaseModule.register({
+      type: 'postgres',
+      host: 'localhost',
+      password: 'password',
+      port: 5432,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
