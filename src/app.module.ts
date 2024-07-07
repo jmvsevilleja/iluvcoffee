@@ -21,7 +21,7 @@ console.log('process.env.NODE_ENV', process.env.NODE_ENV);
         DB_HOST: Joi.required(),
         DB_PORT: Joi.number().default(5432),
       }),
-      isGlobal: true,
+      // isGlobal: true,
       envFilePath: ['.env', `.env.${process.env.NODE_ENV || 'local'}`],
     }),
     DatabaseModule.register({
