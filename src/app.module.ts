@@ -9,12 +9,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getTypeOrmConfig } from './config/typeorm.config';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { DatabaseModule } from './database/database.module';
+import * as Joi from '@hapi/joi';
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      // ignoreEnvFile: true,
+      validationSchema: Joi.object({
+        DB_HOST: Joi.required(),
+        DB_PORT: Joi.number().default(5432),
+      }),
       isGlobal: true,
       envFilePath: ['.env', `.env.${process.env.NODE_ENV || 'local'}`],
     }),
