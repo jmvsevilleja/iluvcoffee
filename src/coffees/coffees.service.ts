@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
 import { InjectRepository, InjectDataSource } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Flavor } from './entities/flavor.entity';
@@ -9,7 +9,8 @@ import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { DataSource } from 'typeorm';
 import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS, COFFEE_SHOPS } from './coffees.constants';
-import { ConfigService } from '@nestjs/config';
+import { ConfigService, ConfigType } from '@nestjs/config';
+import coffeesConfig from './config/coffees.config';
 
 @Injectable({ scope: Scope.DEFAULT }) // DEFAULT, TRANSIENT, REQUEST scope - instance lifetime of a provider
 export class CoffeesService {
@@ -20,6 +21,8 @@ export class CoffeesService {
     private readonly flavorRepository: Repository<Flavor>,
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly configService: ConfigService,
+    @Inject(coffeesConfig.KEY)
+    private coffeesConfiguration: ConfigType<typeof coffeesConfig>,
     @Inject(COFFEE_BRANDS) coffeeBrands: string[],
     @Inject(COFFEE_SHOPS) coffeeShops: string[],
   ) {
@@ -29,6 +32,10 @@ export class CoffeesService {
 
     const databaseHost = this.configService.get('database.host', 'local');
     console.log('databaseHost', databaseHost);
+
+    const coffeesConfigGet = this.configService.get('coffees.foo', 'local');
+    console.log('coffeesConfigGet', coffeesConfigGet);
+    console.log(coffeesConfiguration.foo);
   }
 
   async findAll(paginationQuery: PaginationQueryDto) {
