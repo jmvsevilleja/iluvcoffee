@@ -10,6 +10,7 @@ import { getTypeOrmConfig } from './config/typeorm.config';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { DatabaseModule } from './database/database.module';
 import * as Joi from '@hapi/joi';
+import appConfig from './config/app.config';
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
@@ -23,6 +24,10 @@ console.log('process.env.NODE_ENV', process.env.NODE_ENV);
       }),
       // isGlobal: true,
       envFilePath: ['.env', `.env.${process.env.NODE_ENV || 'local'}`],
+      load: [appConfig],
+    }),
+    ConfigModule.forRoot({
+      load: [appConfig],
     }),
     DatabaseModule.register({
       type: 'postgres',
