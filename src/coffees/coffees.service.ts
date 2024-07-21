@@ -21,8 +21,7 @@ export class CoffeesService {
     private readonly flavorRepository: Repository<Flavor>,
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly configService: ConfigService,
-    @Inject(coffeesConfig.KEY)
-    private coffeesConfiguration: ConfigType<typeof coffeesConfig>,
+    @Inject(coffeesConfig.KEY) coffeesConfiguration: ConfigType<typeof coffeesConfig>,
     @Inject(COFFEE_BRANDS) coffeeBrands: string[],
     @Inject(COFFEE_SHOPS) coffeeShops: string[],
   ) {
@@ -35,7 +34,7 @@ export class CoffeesService {
 
     const coffeesConfigGet = this.configService.get('coffees.foo', 'local');
     console.log('coffeesConfigGet', coffeesConfigGet);
-    console.log(coffeesConfiguration.foo);
+    console.log('coffeesConfiguration', coffeesConfiguration.foo); // using configType
   }
 
   async findAll(paginationQuery: PaginationQueryDto) {

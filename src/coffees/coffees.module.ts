@@ -41,7 +41,6 @@ export class CoffeeShopsFactory {
   exports: [CoffeesService],
   imports: [
     TypeOrmModule.forFeature([Coffee, Flavor, Event]),
-    ConfigModule,
     ConfigModule.forFeature(coffeesConfig),
   ],
   providers: [
