@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 // import { CoffeesController } from './coffees/coffees.controller';
@@ -11,6 +11,7 @@ import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { DatabaseModule } from './database/database.module';
 import * as Joi from '@hapi/joi';
 import appConfig from './config/app.config';
+import { APP_PIPE } from '@nestjs/core';
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
@@ -46,6 +47,20 @@ console.log('process.env.NODE_ENV', process.env.NODE_ENV);
     CoffeeRatingModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      // useClass: ValidationPipe,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+        forbidNonWhitelisted: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
+      }), // module scope
+    },
+  ],
 })
 export class AppModule {}

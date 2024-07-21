@@ -10,7 +10,9 @@ import {
   Patch,
   Post,
   Query,
-//  Res,
+  UsePipes,
+  ValidationPipe,
+  //  Res,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 // import { Coffee } from './entities/coffee.entity';
@@ -20,6 +22,7 @@ import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 
+// @UsePipes(ValidationPipe) // controller scope
 @Controller('coffees')
 export class CoffeesController {
   constructor(
@@ -35,9 +38,13 @@ export class CoffeesController {
   //     return response.status(200).send('This action returns all coffees!!!');
   //   }
 
+  // @UsePipes(ValidationPipe) // method scope
   @Get()
   findAll(@Query() paginationQuery: PaginationQueryDto) {
-    // const {limit, offset} = paginationQuery;
+    const { limit, offset } = paginationQuery;
+    console.log(limit, offset);
+    console.log('typeof limit', typeof limit);
+    console.log('typeof offset', typeof offset);
     return this.coffeesService.findAll(paginationQuery);
     // return `This action returns all coffees!!! Limit: ${limit}, offset ${offset}`;
   }
@@ -60,7 +67,10 @@ export class CoffeesController {
   @Post()
   create(@Body() createCoffeeDto: CreateCoffeeDto) {
     // validation pipe transform
-    console.log('createCoffeeDto instanceof CreateCoffeeDto', createCoffeeDto instanceof CreateCoffeeDto);
+    console.log(
+      'createCoffeeDto instanceof CreateCoffeeDto',
+      createCoffeeDto instanceof CreateCoffeeDto,
+    );
     // validation pipe whitelist
     console.log('createCoffeeDto', createCoffeeDto);
     // const {name, age} = body;
@@ -70,7 +80,10 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateCoffeeDto: UpdateCoffeeDto) {
+  update(
+    @Param('id') id: number,
+    @Body(ValidationPipe) updateCoffeeDto: UpdateCoffeeDto,
+  ) {
     return this.coffeesService.update(id, updateCoffeeDto);
     //return `This action updates #${id} coffees!!!`;
   }
