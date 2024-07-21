@@ -3,17 +3,17 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
-  HttpStatus,
+  // HttpCode,
+  // HttpStatus,
   Inject,
   Param,
   Patch,
   Post,
   Query,
-  Res,
+//  Res,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
-import { Coffee } from './entities/coffee.entity';
+// import { Coffee } from './entities/coffee.entity';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
@@ -27,7 +27,7 @@ export class CoffeesController {
     @Inject(REQUEST) private readonly request: Request,
   ) {
     console.log('CoffeesController created');
-    console.log('request host', request.headers.host);
+    console.log('request host', this.request.headers.host);
   }
 
   //   @Get('')
@@ -44,7 +44,8 @@ export class CoffeesController {
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    console.log(typeof id);
+    // validation pipe transform
+    console.log('typeof id', typeof id);
     return this.coffeesService.findOne(id);
     // return `This action returns #${id} coffees!!!`;
   }
@@ -58,7 +59,10 @@ export class CoffeesController {
 
   @Post()
   create(@Body() createCoffeeDto: CreateCoffeeDto) {
-    console.log(createCoffeeDto instanceof CreateCoffeeDto);
+    // validation pipe transform
+    console.log('createCoffeeDto instanceof CreateCoffeeDto', createCoffeeDto instanceof CreateCoffeeDto);
+    // validation pipe whitelist
+    console.log('createCoffeeDto', createCoffeeDto);
     // const {name, age} = body;
     return this.coffeesService.create(createCoffeeDto);
     // return `This action creates ${name}, ${age} coffees!!!`;
