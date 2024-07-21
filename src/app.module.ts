@@ -40,8 +40,7 @@ console.log('process.env.NODE_ENV', process.env.NODE_ENV);
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        getTypeOrmConfig(configService),
+      useFactory: (config: ConfigService) => getTypeOrmConfig(config),
     }),
     CoffeesModule,
     CoffeeRatingModule,
