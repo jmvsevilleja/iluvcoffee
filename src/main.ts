@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 //import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
+import { WrapResponseInterceptor } from './common/interceptor/wrap-response.interceptor';
 // import { ApiKeyGuard } from './common/guard/api-key.guard';
 
 async function bootstrap() {
@@ -21,6 +22,7 @@ option in the `ValidationPipe` configuration does: */
   // );
   app.useGlobalFilters(new HttpExceptionFilter());
   // app.useGlobalGuards(new ApiKeyGuard())
+  app.useGlobalInterceptors(new WrapResponseInterceptor());
   await app.listen(3000);
 }
 bootstrap();
