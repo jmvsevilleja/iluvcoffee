@@ -1,22 +1,24 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CommonModule } from './common/common.module';
 // import { CoffeesController } from './coffees/coffees.controller';
 // import { CoffeesService } from './coffees/coffees.service';
-import { CoffeesModule } from './coffees/coffees.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { getTypeOrmConfig } from './config/typeorm.config';
-import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
-import { DatabaseModule } from './database/database.module';
 import * as Joi from '@hapi/joi';
-import appConfig from './config/app.config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
+import { CoffeesModule } from './coffees/coffees.module';
+import appConfig from './config/app.config';
+import { getTypeOrmConfig } from './config/typeorm.config';
+import { DatabaseModule } from './database/database.module';
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
 @Module({
   imports: [
+    CommonModule,
     ConfigModule.forRoot({
       // ignoreEnvFile: true,
       validationSchema: Joi.object({

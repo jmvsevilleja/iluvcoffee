@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   Query,
+  SetMetadata,
   UsePipes,
   ValidationPipe,
   //  Res,
@@ -21,6 +22,7 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
+import { Public } from 'src/common/decorator/public.decorator';
 
 // @UsePipes(ValidationPipe) // controller scope
 @Controller('coffees')
@@ -39,6 +41,8 @@ export class CoffeesController {
   //   }
 
   // @UsePipes(ValidationPipe) // method scope
+
+  @Public()
   @Get()
   findAll(@Query() paginationQuery: PaginationQueryDto) {
     const { limit, offset } = paginationQuery;
