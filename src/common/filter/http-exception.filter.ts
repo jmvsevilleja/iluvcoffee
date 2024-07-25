@@ -8,25 +8,20 @@ export class HttpExceptionFilter<T extends HttpException> implements ExceptionFi
     const request = ctx.getRequest();
     const status = exception.getStatus();
 
-    // Get the detailed error response
     const errorResponse = exception.getResponse();
 
-    // Handle the case where errorResponse might be a string or an object
-    const message = typeof errorResponse === 'string'
-    ? errorResponse
-    : (errorResponse as any).message || exception.message;
-
-    const error = typeof errorResponse === 'string'
-    ? errorResponse
-    : (errorResponse as any).error || 'Internal Server Error';
+    const { message, error } = typeof errorResponse === 'string'
+      ? { message: errorResponse, error: errorResponse }
+      : { message: (errorResponse as any).message || exception.message, error: (errorResponse as any).error || 'Internal Server Error' };
 
     const customErrorResponse = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
-      message: message,
-      error: error,
+      message,
+      error,
     };
+
     response.status(status).json(customErrorResponse);
   }
 }
