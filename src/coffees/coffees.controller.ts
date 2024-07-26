@@ -23,6 +23,7 @@ import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { Public } from 'src/common/decorator/public.decorator';
+import { ParseIntPipe } from 'src/common/pipe/parse-int.pipe';
 
 // @UsePipes(ValidationPipe) // controller scope
 @Controller('coffees')
@@ -54,9 +55,9 @@ export class CoffeesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     // validation pipe transform
-    console.log('typeof id', typeof id);
+    console.log('typeof id', typeof id, id);
     return this.coffeesService.findOne(id);
     // return `This action returns #${id} coffees!!!`;
   }
