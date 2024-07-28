@@ -7,6 +7,7 @@ import {
   // HttpStatus,
   Inject,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -23,7 +24,6 @@ import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { Public } from 'src/common/decorator/public.decorator';
-import { ParseIntPipe } from 'src/common/pipe/parse-int.pipe';
 
 // @UsePipes(ValidationPipe) // controller scope
 @Controller('coffees')
