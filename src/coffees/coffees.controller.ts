@@ -11,8 +11,9 @@ import {
   Patch,
   Post,
   Query,
-  SetMetadata,
-  UsePipes,
+  // SetMetadata,
+  // UseGuards,
+  // UsePipes,
   ValidationPipe,
   //  Res,
 } from '@nestjs/common';
@@ -25,9 +26,10 @@ import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { Public } from 'src/common/decorator/public.decorator';
 import { Protocol } from 'src/common/decorator/protocol-decorator.decorator';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 // @UsePipes(ValidationPipe) // controller scope
+@ApiTags('coffees')
 @Controller('coffees')
 export class CoffeesController {
   constructor(
@@ -62,6 +64,7 @@ export class CoffeesController {
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id', ParseIntPipe) id: number) {
     // validation pipe transform
     console.log('typeof id', typeof id, id);
@@ -77,6 +80,7 @@ export class CoffeesController {
   // }
 
   @Post()
+  @ApiSecurity('Authorization')
   create(@Body() createCoffeeDto: CreateCoffeeDto) {
     // validation pipe transform
     console.log(
@@ -91,6 +95,7 @@ export class CoffeesController {
     // return body;
   }
 
+  @ApiSecurity('Authorization')
   @Patch(':id')
   update(
     @Param('id') id: number,
@@ -100,6 +105,7 @@ export class CoffeesController {
     //return `This action updates #${id} coffees!!!`;
   }
 
+  @ApiSecurity('Authorization')
   @Delete(':id')
   delete(@Param('id') id: number) {
     return this.coffeesService.remove(id);

@@ -14,8 +14,11 @@ async function bootstrap() {
     .setTitle('I Love Coffee')
     .setDescription('Coffee Application')
     .setVersion('1.0')
+    .addApiKey(
+      { type: 'apiKey', in: 'header', name: 'Authorization' },
+      'Authorization',
+    )
     .build();
-
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
   // global scope
