@@ -25,6 +25,7 @@ import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { Public } from 'src/common/decorator/public.decorator';
 import { Protocol } from 'src/common/decorator/protocol-decorator.decorator';
+import { ApiResponse } from '@nestjs/swagger';
 
 // @UsePipes(ValidationPipe) // controller scope
 @Controller('coffees')
@@ -43,11 +44,15 @@ export class CoffeesController {
   //   }
 
   // @UsePipes(ValidationPipe) // method scope
-
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  // @ApiForbiddenResponse({description:"Forbidden"})
   @Public()
   @Get()
-  findAll(@Protocol('https') protocol: string, @Query() paginationQuery: PaginationQueryDto) {
-    console.log('protocol', protocol)
+  findAll(
+    @Protocol('https') protocol: string,
+    @Query() paginationQuery: PaginationQueryDto,
+  ) {
+    console.log('protocol', protocol);
     const { limit, offset } = paginationQuery;
     console.log(limit, offset);
     console.log('typeof limit', typeof limit);
