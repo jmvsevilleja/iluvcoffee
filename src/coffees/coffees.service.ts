@@ -8,9 +8,9 @@ import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { DataSource } from 'typeorm';
 import { Event } from '../events/entities/event.entity';
-import { COFFEE_BRANDS, COFFEE_SHOPS } from './coffees.constants';
-import { ConfigService, ConfigType } from '@nestjs/config';
-import coffeesConfig from './config/coffees.config';
+// import { COFFEE_BRANDS, COFFEE_SHOPS } from './coffees.constants';
+// import { ConfigService, ConfigType } from '@nestjs/config';
+// import coffeesConfig from './config/coffees.config';
 
 @Injectable({ scope: Scope.DEFAULT }) // DEFAULT, TRANSIENT, REQUEST scope - instance lifetime of a provider
 export class CoffeesService {
@@ -20,21 +20,21 @@ export class CoffeesService {
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
     @InjectDataSource() private readonly dataSource: DataSource,
-    private readonly configService: ConfigService,
-    @Inject(coffeesConfig.KEY) coffeesConfiguration: ConfigType<typeof coffeesConfig>,
-    @Inject(COFFEE_BRANDS) coffeeBrands: string[],
-    @Inject(COFFEE_SHOPS) coffeeShops: string[],
+    // private readonly configService: ConfigService,
+    // @Inject(coffeesConfig.KEY) coffeesConfiguration: ConfigType<typeof coffeesConfig>,
+    // @Inject(COFFEE_BRANDS) coffeeBrands: string[],
+    // @Inject(COFFEE_SHOPS) coffeeShops: string[],
   ) {
-    console.log('coffeBrands', coffeeBrands);
-    console.log('coffeShops', coffeeShops);
+    // console.log('coffeBrands', coffeeBrands);
+    // console.log('coffeShops', coffeeShops);
     console.log('CoffeeService instantiated');
 
-    const databaseHost = this.configService.get('database.host', 'local');
-    console.log('databaseHost', databaseHost);
+    // const databaseHost = this.configService.get('database.host', 'local');
+    // console.log('databaseHost', databaseHost);
 
-    const coffeesConfigGet = this.configService.get('coffees.foo', 'local');
-    console.log('coffeesConfigGet', coffeesConfigGet);
-    console.log('coffeesConfiguration', coffeesConfiguration.foo); // using configType
+    // const coffeesConfigGet = this.configService.get('coffees.foo', 'local');
+    // console.log('coffeesConfigGet', coffeesConfigGet);
+    // console.log('coffeesConfiguration', coffeesConfiguration.foo); // using configType
   }
 
   async findAll(paginationQuery: PaginationQueryDto) {
