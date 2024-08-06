@@ -1,7 +1,14 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+} from '@nestjs/common';
 
 @Catch(HttpException)
-export class HttpExceptionFilter<T extends HttpException> implements ExceptionFilter {
+export class HttpExceptionFilter<T extends HttpException>
+  implements ExceptionFilter
+{
   catch(exception: T, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
@@ -10,9 +17,13 @@ export class HttpExceptionFilter<T extends HttpException> implements ExceptionFi
 
     const errorResponse = exception.getResponse();
 
-    const { message, error } = typeof errorResponse === 'string'
-      ? { message: errorResponse, error: errorResponse }
-      : { message: (errorResponse as any).message || exception.message, error: (errorResponse as any).error || 'Internal Server Error' };
+    const { message, error } =
+      typeof errorResponse === 'string'
+        ? { message: errorResponse, error: errorResponse }
+        : {
+            message: (errorResponse as any).message || exception.message,
+            error: (errorResponse as any).error || 'Internal Server Error',
+          };
 
     const customErrorResponse = {
       statusCode: status,

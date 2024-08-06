@@ -14,20 +14,28 @@ const createMockRepository = <T = any>(): MockRepository<T> => ({
 
 describe('CoffeesService', () => {
   let service: CoffeesService;
-  let coffeeRepository : MockRepository;
+  let coffeeRepository: MockRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CoffeesService,
         { provide: DataSource, useValue: {} },
-        { provide: getRepositoryToken(Flavor), useValue: createMockRepository() },
-        { provide: getRepositoryToken(Coffee), useValue: createMockRepository() },
+        {
+          provide: getRepositoryToken(Flavor),
+          useValue: createMockRepository(),
+        },
+        {
+          provide: getRepositoryToken(Coffee),
+          useValue: createMockRepository(),
+        },
       ],
     }).compile();
 
     service = module.get<CoffeesService>(CoffeesService);
-    coffeeRepository = module.get<MockRepository<Coffee>>(getRepositoryToken(Coffee));
+    coffeeRepository = module.get<MockRepository<Coffee>>(
+      getRepositoryToken(Coffee),
+    );
   });
 
   it('should be defined', () => {
@@ -45,8 +53,7 @@ describe('CoffeesService', () => {
         expect(coffee).toEqual(expectedCoffee);
         // expect(coffee.id).toEqual(1);
         // expect(coffee.name).toEqual(expectedCoffee.name);
-      }
-      );
+      });
     });
     describe('otherwise', () => {
       it('should throw the "NotFoundException"', async () => {

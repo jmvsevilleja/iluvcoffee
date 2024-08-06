@@ -70,7 +70,10 @@ export class CoffeeShopsFactory {
       provide: COFFEE_BRANDS,
       useFactory: async (dataSource: DataSource): Promise<string[]> => {
         const coffeeBrands = await Promise.resolve(['greate Taste', 'Nescafe']);
-        console.log('[!] Async Factory');
+        console.log(
+          'Using Async Factory, Datasource initialized: ',
+          dataSource.isInitialized,
+        );
         return coffeeBrands;
       },
       inject: [DataSource],
