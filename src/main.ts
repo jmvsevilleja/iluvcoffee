@@ -37,7 +37,7 @@ option in the `ValidationPipe` configuration does: */
   app.useGlobalFilters(new HttpExceptionFilter());
   // app.useGlobalGuards(new ApiKeyGuard())
   app.useGlobalInterceptors(
-    new WrapResponseInterceptor(),
+    // new WrapResponseInterceptor(),
     new TimeoutInterceptor(),
   );
   await app.listen(3000);

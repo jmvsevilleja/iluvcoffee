@@ -11,6 +11,7 @@ import {
   Patch,
   Post,
   Query,
+  UseInterceptors,
   // SetMetadata,
   // UseGuards,
   // UsePipes,
@@ -24,13 +25,15 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { Public } from 'src/common/decorator/public.decorator';
-import { Protocol } from 'src/common/decorator/protocol-decorator.decorator';
+import { Public } from '../common/decorator/public.decorator';
+import { Protocol } from '../common/decorator/protocol-decorator.decorator';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { WrapResponseInterceptor } from '../common/interceptor/wrap-response.interceptor';
 
 // @UsePipes(ValidationPipe) // controller scope
 @ApiTags('coffees')
 @Controller('coffees')
+@UseInterceptors(WrapResponseInterceptor)
 export class CoffeesController {
   constructor(
     private readonly coffeesService: CoffeesService,
