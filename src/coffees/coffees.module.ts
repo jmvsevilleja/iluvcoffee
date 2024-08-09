@@ -2,13 +2,14 @@ import { Injectable, Module } from '@nestjs/common';
 import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Coffee } from './entities/coffee.entity';
-import { Flavor } from './entities/flavor.entity';
-import { Event } from '../events/entities/event.entity';
+import { Coffee, CoffeeSchema } from './entities/coffee.entity';
+// import { Flavor } from './entities/flavor.entity';
+// import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS, COFFEE_SHOPS } from './coffees.constants';
 import { DataSource } from 'typeorm';
-import { ConfigModule } from '@nestjs/config';
-import coffeesConfig from './config/coffees.config';
+// import { ConfigModule } from '@nestjs/config';
+// import coffeesConfig from './config/coffees.config';
+import { MongooseModule } from '@nestjs/mongoose';
 
 class ConfigService {}
 class DevelopmentConfigService {
@@ -40,8 +41,9 @@ export class CoffeeShopsFactory {
   controllers: [CoffeesController],
   exports: [CoffeesService],
   imports: [
-    TypeOrmModule.forFeature([Coffee, Flavor, Event]),
-    ConfigModule.forFeature(coffeesConfig),
+    MongooseModule.forFeature([{ name: Coffee.name, schema: CoffeeSchema }]),
+    // TypeOrmModule.forFeature([Coffee, Flavor, Event]),
+    // ConfigModule.forFeature(coffeesConfig),
   ],
   providers: [
     CoffeesService,
@@ -66,18 +68,18 @@ export class CoffeeShopsFactory {
       useFactory: (ShopsFactory: CoffeeShopsFactory) => ShopsFactory.create(),
       inject: [CoffeeShopsFactory],
     }, // factory Providers
-    {
-      provide: COFFEE_BRANDS,
-      useFactory: async (dataSource: DataSource): Promise<string[]> => {
-        const coffeeBrands = await Promise.resolve(['greate Taste', 'Nescafe']);
-        console.log(
-          'Using Async Factory, Datasource initialized: ',
-          dataSource.isInitialized,
-        );
-        return coffeeBrands;
-      },
-      inject: [DataSource],
-    }, // factory Providers
+    // {
+    //   provide: COFFEE_BRANDS,
+    //   useFactory: async (dataSource: DataSource): Promise<string[]> => {
+    //     const coffeeBrands = await Promise.resolve(['greate Taste', 'Nescafe']);
+    //     console.log(
+    //       'Using Async Factory, Datasource initialized: ',
+    //       dataSource.isInitialized,
+    //     );
+    //     return coffeeBrands;
+    //   },
+    //   inject: [DataSource],
+    // }, // factory Providers
   ],
 })
 export class CoffeesModule {

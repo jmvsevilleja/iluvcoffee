@@ -68,7 +68,7 @@ export class CoffeesController {
 
   @Get(':id')
   @Public()
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: string) {
     // validation pipe transform
     console.log('typeof id', typeof id, id);
     return this.coffeesService.findOne(id);
@@ -101,7 +101,7 @@ export class CoffeesController {
   @ApiSecurity('Authorization')
   @Patch(':id')
   update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body(ValidationPipe) updateCoffeeDto: UpdateCoffeeDto,
   ) {
     return this.coffeesService.update(id, updateCoffeeDto);
@@ -110,7 +110,7 @@ export class CoffeesController {
 
   @ApiSecurity('Authorization')
   @Delete(':id')
-  delete(@Param('id') id: number) {
+  delete(@Param('id') id: string) {
     return this.coffeesService.remove(id);
     // return `This action removes #${id} coffees!!!`;
   }
