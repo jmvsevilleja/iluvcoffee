@@ -42,7 +42,7 @@ export class CoffeesService {
 
   async findAll(paginationQuery: PaginationQueryDto) {
     const { limit, offset } = paginationQuery;
-    return await this.coffeeModel.find().exec();
+    return await this.coffeeModel.find().skip(offset).limit(limit).exec();
   }
 
   async findOne(id: string) {
