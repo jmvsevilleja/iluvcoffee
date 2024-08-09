@@ -74,15 +74,9 @@ export class CoffeesService {
     //     updateCoffeeDto.flavors.map((name) => this.preloadFlavorByName(name)),
     //   ));
 
-    const coffee = await this.coffeeModel
-      .findOneAndUpdate(
-        {
-          id: id,
-        },
-        { $set: updateCoffeeDto },
-        { new: true },
-      )
-      .exec();
+    const coffee = await this.coffeeModel.findByIdAndUpdate(id, updateCoffeeDto, {
+      new: true,
+    }).exec();
 
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
@@ -91,7 +85,7 @@ export class CoffeesService {
   }
 
   async remove(id: string) {
-    const coffee = await this.coffeeModel.findOneAndDelete({ id });
+    const coffee = await this.coffeeModel.findByIdAndDelete(id).exec();
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
     }
