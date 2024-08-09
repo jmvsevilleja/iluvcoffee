@@ -14,8 +14,8 @@ export const getTypeOrmConfig = (
   database: configService.get<string>('DB_DATABASE', 'test'),
   entities: [join(__dirname, '../**/*.entity{.ts,.js}')],
   migrations: [join(__dirname, '../migrations/*{.ts,.js}')],
-  synchronize: false,
-  logging: true,
+  synchronize: configService.get<boolean>('DB_SYNCHRONIZE', false),
+  logging:  configService.get<boolean>('DB_LOGGING', false)
 });
 
 export const getDataSourceOptions = (
