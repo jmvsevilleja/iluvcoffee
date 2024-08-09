@@ -23,7 +23,6 @@ describe('AppController (e2e)', () => {
   });
 
   afterAll(async () => {
-    await app.close()
-  })
-
+    await app.close();
+  });
 });

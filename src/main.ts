@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-//import { ValidationPipe } from '@nestjs/common';
+// import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filter/http-exception.filter';
-import { WrapResponseInterceptor } from './common/interceptor/wrap-response.interceptor';
+// import { WrapResponseInterceptor } from './common/interceptor/wrap-response.interceptor';
 import { TimeoutInterceptor } from './common/interceptor/timeout.interceptor';
 // import { ApiKeyGuard } from './common/guard/api-key.guard';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -22,8 +22,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
   // global scope
-  /* This code snippet is setting up a global validation pipe in a Nest.js application. Here's what each
-option in the `ValidationPipe` configuration does: */
   // app.useGlobalPipes(
   //   new ValidationPipe({
   //     whitelist: true,
