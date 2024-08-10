@@ -32,6 +32,7 @@ import { Protocol } from '../common/decorator/protocol-decorator.decorator';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { WrapResponseInterceptor } from '../common/interceptor/wrap-response.interceptor';
 import { Coffee } from './entities/coffee.entity';
+import { ObjectIdPipe } from 'src/common/pipe/object-id.pipe';
 
 // @UsePipes(ValidationPipe) // controller scope
 @ApiTags('coffees')
@@ -71,7 +72,7 @@ export class CoffeesController {
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ObjectIdPipe) id: string) {
     // validation pipe transform
     console.log('typeof id', typeof id, id);
     return this.coffeesService.findOne(id);
@@ -104,7 +105,7 @@ export class CoffeesController {
   @ApiSecurity('Authorization')
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ObjectIdPipe) id: string,
     @Body(ValidationPipe) updateCoffeeDto: UpdateCoffeeDto,
   ) {
     return this.coffeesService.update(id, updateCoffeeDto);
@@ -113,17 +114,16 @@ export class CoffeesController {
 
   @ApiSecurity('Authorization')
   @Delete(':id')
-  delete(@Param('id') id: string) {
+  delete(@Param('id', ObjectIdPipe) id: string) {
     return this.coffeesService.remove(id);
     // return `This action removes #${id} coffees!!!`;
   }
 
   @ApiSecurity('Authorization')
   @Post(':id/recommend')
-  async recommendCoffee(@Param('id') id: string) {
+  async recommendCoffee(@Param('id', ObjectIdPipe) id: string) {
     const coffee: Coffee = await this.coffeesService.findOne(id);
     await this.coffeesService.recommendCoffee(coffee);
     return { message: `Coffee #${id} has been recommended` };
   }
-
 }
