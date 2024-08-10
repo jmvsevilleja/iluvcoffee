@@ -1,15 +1,15 @@
 import { Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
-// import { InjectRepository, InjectDataSource } from '@nestjs/typeorm';
+// import { InjectDataSource } from '@nestjs/typeorm';
 // import { Repository } from 'typeorm';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 // import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 // import { DataSource } from 'typeorm';
-// import { Event } from '../events/entities/event.entity';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Event } from '../events/entities/event.entity';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
+import { Connection, Model } from 'mongoose';
 // import { COFFEE_BRANDS, COFFEE_SHOPS } from './coffees.constants';
 // import { ConfigService, ConfigType } from '@nestjs/config';
 // import coffeesConfig from './config/coffees.config';
@@ -18,6 +18,8 @@ import { Model } from 'mongoose';
 export class CoffeesService {
   constructor(
     @InjectModel(Coffee.name) private readonly coffeeModel: Model<Coffee>,
+    @InjectModel(Event.name) private readonly eventModel: Model<Event>,
+    @InjectConnection() private readonly connection: Connection, // Use InjectConnection to inject the Connection object
     // @InjectRepository(Coffee)
     // private readonly coffeeRepository: Repository<Coffee>,
     // @InjectRepository(Flavor)
@@ -74,9 +76,11 @@ export class CoffeesService {
     //     updateCoffeeDto.flavors.map((name) => this.preloadFlavorByName(name)),
     //   ));
 
-    const coffee = await this.coffeeModel.findByIdAndUpdate(id, updateCoffeeDto, {
-      new: true,
-    }).exec();
+    const coffee = await this.coffeeModel
+      .findByIdAndUpdate(id, updateCoffeeDto, {
+        new: true,
+      })
+      .exec();
 
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
@@ -92,39 +96,34 @@ export class CoffeesService {
     return coffee;
   }
 
-  // async recommendCoffee(coffee: Coffee) {
-  //   const queryRunner = this.dataSource.createQueryRunner();
+  async recommendCoffee(coffee: Coffee) {
+    const session = await this.connection.startSession();
+    session.startTransaction();
 
-  //   await queryRunner.connect();
-  //   await queryRunner.startTransaction();
+    try {
+      // Increment the recommendations
+      coffee.recommendations++;
 
-  //   try {
-  //     coffee.recommendations++;
+      // Create the event document
+      const recommendEvent = new this.eventModel({
+        name: 'recommend_coffee',
+        type: 'coffee',
+        payload: { coffeeId: coffee._id },
+      });
 
-  //     const recommendEvent = new Event();
-  //     recommendEvent.name = 'recommend_coffee';
-  //     recommendEvent.type = 'coffee';
-  //     recommendEvent.payload = { coffeeId: coffee.id };
+      // Save the coffee and event within the transaction
+      await coffee.save({ session });
+      await recommendEvent.save({ session });
 
-  //     await queryRunner.manager.save(coffee);
-  //     await queryRunner.manager.save(recommendEvent);
-
-  //     await queryRunner.commitTransaction();
-  //   } catch (err) {
-  //     await queryRunner.rollbackTransaction();
-  //     throw err;
-  //   } finally {
-  //     await queryRunner.release();
-  //   }
-  // }
-
-  // private async preloadFlavorByName(name: string): Promise<Flavor> {
-  //   const existingflavor = await this.flavorRepository.findOne({
-  //     where: { name },
-  //   });
-  //   if (existingflavor) {
-  //     return existingflavor;
-  //   }
-  //   return this.flavorRepository.create({ name });
-  // }
+      // Commit the transaction
+      await session.commitTransaction();
+    } catch (err) {
+      // Rollback the transaction on error
+      await session.abortTransaction();
+      throw err;
+    } finally {
+      // End the session
+      session.endSession();
+    }
+  }
 }

@@ -1,17 +1,20 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
 
-@Index(['name', 'type'])
-@Entity()
+@Schema()
 export class Event {
-  @PrimaryGeneratedColumn()
+  @Prop()
   id: number;
 
-  @Column()
+  @Prop()
   type: string;
 
-  @Column()
+  @Prop()
   name: string;
 
-  @Column('json')
+  @Prop({ type: mongoose.Schema.Types.Mixed })
   payload: Record<string, any>;
 }
+
+export const EventSchema = SchemaFactory.createForClass(Event);
+EventSchema.index({ id: 1, type:-1 });

@@ -13,8 +13,12 @@ export class Coffee extends Document {
   @Prop()
   brand: string;
 
+  @Prop({default: 0})
+  recommendations: number;
+
   @Prop([String])
   flavors: string[];
 }
 
 export const CoffeeSchema = SchemaFactory.createForClass(Coffee);
+CoffeeSchema.index({ title: 1 });

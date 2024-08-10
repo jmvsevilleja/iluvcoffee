@@ -6,12 +6,14 @@ import {
   // HttpCode,
   // HttpStatus,
   Inject,
+  // NotFoundException,
   Param,
-  ParseIntPipe,
+  // ParseIntPipe,
   Patch,
   Post,
   Query,
   UseInterceptors,
+  UsePipes,
   // SetMetadata,
   // UseGuards,
   // UsePipes,
@@ -29,6 +31,7 @@ import { Public } from '../common/decorator/public.decorator';
 import { Protocol } from '../common/decorator/protocol-decorator.decorator';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { WrapResponseInterceptor } from '../common/interceptor/wrap-response.interceptor';
+import { Coffee } from './entities/coffee.entity';
 
 // @UsePipes(ValidationPipe) // controller scope
 @ApiTags('coffees')
@@ -114,4 +117,13 @@ export class CoffeesController {
     return this.coffeesService.remove(id);
     // return `This action removes #${id} coffees!!!`;
   }
+
+  @ApiSecurity('Authorization')
+  @Post(':id/recommend')
+  async recommendCoffee(@Param('id') id: string) {
+    const coffee: Coffee = await this.coffeesService.findOne(id);
+    await this.coffeesService.recommendCoffee(coffee);
+    return { message: `Coffee #${id} has been recommended` };
+  }
+
 }

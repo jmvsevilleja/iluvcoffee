@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CoffeesService } from './coffees.service';
 import { DataSource, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Flavor } from './entities/flavor.entity';
+//import { Flavor } from './entities/flavor.entity';
 import { Coffee } from './entities/coffee.entity';
 import { NotFoundException } from '@nestjs/common';
 
@@ -21,10 +21,10 @@ describe('CoffeesService', () => {
       providers: [
         CoffeesService,
         { provide: DataSource, useValue: {} },
-        {
-          provide: getRepositoryToken(Flavor),
-          useValue: createMockRepository(),
-        },
+        // {
+        //   provide: getRepositoryToken(Flavor),
+        //   useValue: createMockRepository(),
+        // },
         {
           provide: getRepositoryToken(Coffee),
           useValue: createMockRepository(),
@@ -45,7 +45,7 @@ describe('CoffeesService', () => {
   describe('findOne', () => {
     describe('when coffee with ID exists', () => {
       it('should return the coffee object', async () => {
-        const coffeeId = 1;
+        const coffeeId = '1';
         const expectedCoffee = {};
 
         coffeeRepository.findOne.mockReturnValue(expectedCoffee);
@@ -57,7 +57,7 @@ describe('CoffeesService', () => {
     });
     describe('otherwise', () => {
       it('should throw the "NotFoundException"', async () => {
-        const coffeeId = 1;
+        const coffeeId = '1';
         coffeeRepository.findOne.mockReturnValue(undefined);
 
         try {
